@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>泡泡爪印宠物洗护预约</title>
+  <style>
+    :root {
+      --ink: #172024;
+      --muted: #65757a;
+      --teal: #0f8b8d;
+      --teal-dark: #096b6d;
+      --coral: #ff7a59;
+      --mint: #e7f6f2;
+      --cream: #fff8ef;
+      --paper: #ffffff;
+      --line: rgba(23, 32, 36, 0.12);
+      --shadow: 0 18px 42px rgba(24, 82, 88, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.6;
+      background: #f6faf9;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .page {
+      width: min(100%, 760px);
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--paper);
+      box-shadow: 0 0 0 1px rgba(23, 32, 36, 0.04);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      align-items: end;
+      padding: 26px 20px 30px;
+      color: #fff;
+      isolation: isolate;
+      background: #12373a;
+    }
+
+    .hero::before {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      content: "";
+      background:
+        linear-gradient(180deg, rgba(11, 30, 34, 0.24), rgba(11, 30, 34, 0.82)),
+        url("assets/pet-grooming-hero.png") center / cover no-repeat;
+    }
+
+    .brand {
+      position: absolute;
+      top: max(18px, env(safe-area-inset-top));
+      left: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      color: var(--teal-dark);
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 14px 0 22px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 16px;
+    }
+
+    .hero-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      color: #fff;
+      font-weight: 800;
+      background: var(--coral);
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button.secondary {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin: 0;
+      background: var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .summary div {
+      padding: 16px 10px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .summary strong {
+      display: block;
+      color: var(--teal-dark);
+      font-size: 21px;
+      line-height: 1.15;
+    }
+
+    .summary span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    section {
+      padding: 30px 18px;
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.28;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .service-list,
+    .price-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(31, 63, 68, 0.07);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .price-band {
+      background: linear-gradient(180deg, var(--cream), #fff);
+    }
+
+    .price {
+      display: grid;
+      gap: 10px;
+    }
+
+    .price.featured {
+      border-color: rgba(15, 139, 141, 0.42);
+      box-shadow: var(--shadow);
+    }
+
+    .amount {
+      color: var(--teal-dark);
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .amount small {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .chips li {
+      padding: 6px 9px;
+      color: #345056;
+      font-size: 13px;
+      background: var(--mint);
+      border-radius: 999px;
+    }
+
+    .booking {
+      background: #f7fbfa;
+    }
+
+    .form {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: #344248;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 12px;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 4px rgba(15, 139, 141, 0.12);
+    }
+
+    .form-note {
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      display: none;
+      padding: 12px;
+      color: #0d4d4f;
+      font-size: 14px;
+      background: var(--mint);
+      border: 1px solid rgba(15, 139, 141, 0.22);
+      border-radius: 8px;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .contact {
+      color: #fff;
+      background: var(--teal-dark);
+    }
+
+    .contact .section-copy {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .contact-item {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+    }
+
+    .sticky-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.94);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .sticky-bar .button {
+      min-height: 44px;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      background: #fff;
+    }
+
+    @media (min-width: 680px) {
+      .hero {
+        min-height: 620px;
+        padding: 34px 38px 42px;
+      }
+
+      .hero h1 {
+        max-width: 560px;
+        font-size: 48px;
+      }
+
+      .hero p {
+        max-width: 520px;
+        font-size: 18px;
+      }
+
+      section {
+        padding: 40px 38px;
+      }
+
+      .service-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .price-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" id="top">
+      <div class="brand" aria-label="泡泡爪印宠物洗护">
+        <span class="brand-mark">爪</span>
+        <span>泡泡爪印</span>
+      </div>
+      <div>
+        <h1>宠物洗护预约</h1>
+        <p>基础洗护、造型美容、皮毛护理和短时托管。填写下方信息，我们会尽快联系你确认到店时间。</p>
+        <div class="hero-actions">
+          <a class="button" href="#booking">立即预约</a>
+          <a class="button secondary" href="tel:400-888-6620">电话咨询</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="summary" aria-label="门店亮点">
+      <div>
+        <strong>8年</strong>
+        <span>洗护经验</span>
+      </div>
+      <div>
+        <strong>1对1</strong>
+        <span>独立护理</span>
+      </div>
+      <div>
+        <strong>10:00</strong>
+        <span>每日营业</span>
+      </div>
+    </div>
+
+    <section id="services">
+      <h2 class="section-title">适合毛孩子的洗护服务</h2>
+      <p class="section-copy">按体型、毛量和皮肤状态安排流程，先评估再护理，减少宠物紧张。</p>
+      <div class="service-list">
+        <article class="card">
+          <h3>基础洗护</h3>
+          <p>温和沐浴、耳眼清洁、指甲修剪、脚底毛整理和全身吹干。</p>
+        </article>
+        <article class="card">
+          <h3>造型美容</h3>
+          <p>根据品种和生活习惯修剪造型，兼顾清爽、好看和日常打理。</p>
+        </article>
+        <article class="card">
+          <h3>皮毛护理</h3>
+          <p>针对换毛、打结、干燥和敏感皮肤，提供修护润养和深层梳理。</p>
+        </article>
+        <article class="card">
+          <h3>短时托管</h3>
+          <p>洗护前后可短时看护，干净独立休息区，护理状态及时反馈。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="price-band" id="prices">
+      <h2 class="section-title">常用套餐</h2>
+      <p class="section-copy">以下为起步价，长毛、严重打结或特殊护理会在开始前确认。</p>
+      <div class="price-list">
+        <article class="card price">
+          <h3>清爽洗澡</h3>
+          <div class="amount">¥88 <small>起</small></div>
+          <ul class="chips">
+            <li>全身沐浴</li>
+            <li>耳眼清洁</li>
+            <li>指甲修剪</li>
+          </ul>
+        </article>
+        <article class="card price featured">
+          <h3>精致洗剪</h3>
+          <div class="amount">¥168 <small>起</small></div>
+          <ul class="chips">
+            <li>基础洗护</li>
+            <li>造型修剪</li>
+            <li>照片反馈</li>
+          </ul>
+        </article>
+        <article class="card price">
+          <h3>皮毛修护</h3>
+          <div class="amount">¥218 <small>起</small></div>
+          <ul class="chips">
+            <li>低刺激护理</li>
+            <li>深层梳理</li>
+            <li>状态记录</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="booking" id="booking">
+      <h2 class="section-title">填写预约信息</h2>
+      <p class="section-copy">提交后会收到页面提示。要让门店后台真正收到内容，需要把脚本里的接口地址换成你的服务器接口。</p>
+      <form class="form" id="bookingForm" data-submit-endpoint="">
+        <label>
+          主人称呼
+          <input type="text" name="name" placeholder="例如：王女士" autocomplete="name" required>
+        </label>
+        <label>
+          联系电话
+          <input type="tel" name="phone" placeholder="例如：13800000000" autocomplete="tel" required>
+        </label>
+        <label>
+          宠物类型
+          <select name="petType" required>
+            <option value="">请选择</option>
+            <option>小型犬</option>
+            <option>中大型犬</option>
+            <option>猫咪</option>
+            <option>其他宠物</option>
+          </select>
+        </label>
+        <label>
+          想预约的服务
+          <select name="service" required>
+            <option value="">请选择</option>
+            <option>清爽洗澡</option>
+            <option>精致洗剪</option>
+            <option>皮毛修护</option>
+            <option>短时托管</option>
+          </select>
+        </label>
+        <label>
+          期望到店时间
+          <input type="datetime-local" name="visitTime">
+        </label>
+        <label>
+          备注
+          <textarea name="note" placeholder="宠物年龄、体重、是否怕吹风、是否有皮肤敏感等"></textarea>
+        </label>
+        <p class="form-note">当前页面会先保存到浏览器本地。接入后端后，可自动提交到门店系统或企业微信通知。</p>
+        <div class="status" id="formStatus" role="status"></div>
+        <button class="button" type="submit">提交预约</button>
+      </form>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2 class="section-title">门店信息</h2>
+      <p class="section-copy">建议提前一天预约，周末和节假日档期较紧。幼宠或老年宠可提前说明。</p>
+      <div class="contact-list">
+        <div class="contact-item">地址：幸福路 88 号阳光里商街 1F</div>
+        <div class="contact-item">电话：400-888-6620</div>
+        <div class="contact-item">营业时间：周一至周日 10:00 - 20:00</div>
+      </div>
+    </section>
+
+    <footer>© 2026 泡泡爪印宠物洗护</footer>
+
+    <nav class="sticky-bar" aria-label="快捷操作">
+      <a class="button secondary" style="color:#0f6f70;background:#e7f6f2;border-color:rgba(15,139,141,.18);" href="#prices">看套餐</a>
+      <a class="button" href="#booking">去预约</a>
+    </nav>
+  </main>
+
+  <script>
+    const form = document.querySelector("#bookingForm");
+    const statusBox = document.querySelector("#formStatus");
+
+    function showStatus(message, type = "success") {
+      statusBox.textContent = message;
+      statusBox.classList.add("show");
+      statusBox.style.background = type === "error" ? "#fff2ef" : "#e7f6f2";
+      statusBox.style.color = type === "error" ? "#8a2d1c" : "#0d4d4f";
+      statusBox.style.borderColor = type === "error" ? "rgba(255, 122, 89, 0.36)" : "rgba(15, 139, 141, 0.22)";
+    }
+
+    function getPayload() {
+      const data = new FormData(form);
+      return {
+        name: data.get("name").trim(),
+        phone: data.get("phone").trim(),
+        petType: data.get("petType"),
+        service: data.get("service"),
+        visitTime: data.get("visitTime"),
+        note: data.get("note").trim(),
+        source: "wechat-menu-h5",
+        submittedAt: new Date().toISOString()
+      };
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitButton = form.querySelector("button[type='submit']");
+      const endpoint = form.dataset.submitEndpoint.trim();
+      const payload = getPayload();
+
+      if (!payload.name || !payload.phone || !payload.petType || !payload.service) {
+        showStatus("请先填写称呼、电话、宠物类型和服务项目。", "error");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "提交中...";
+
+      try {
+        if (endpoint) {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error("submit failed");
+          }
+
+          showStatus("预约信息已提交，我们会尽快联系你确认时间。");
+        } else {
+          const records = JSON.parse(localStorage.getItem("petCareBookings") || "[]");
+          records.unshift(payload);
+          localStorage.setItem("petCareBookings", JSON.stringify(records.slice(0, 20)));
+          showStatus("已记录预约信息。当前还未接入服务器，请同时电话联系门店确认。");
+        }
+
+        form.reset();
+      } catch (error) {
+        showStatus("提交失败，请稍后再试，或直接拨打门店电话。", "error");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "提交预约";
+      }
+    });
+  </script>
+</body>
+</html>
